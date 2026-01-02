@@ -1,0 +1,24 @@
+class Solution {
+    public int[] diStringMatch(String s) {
+        if(s == null) {
+            return null;
+        }
+        int n = s.length();
+        int low = 0 , right = n;
+        
+        int[] res = new int[n+1];
+
+        for(int i =0 ; i<n; i++) {
+            if (s.charAt(i) == 'I') {
+                res[i] = low++;
+            }else {
+                res[i] = right--;
+            }
+        }
+        
+
+
+        res[n] = low;
+        return res;
+    }
+}
