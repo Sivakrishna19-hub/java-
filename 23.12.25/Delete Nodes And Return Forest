@@ -1,0 +1,24 @@
+class Solution {
+    HashSet<Integer> del = new HashSet<>();
+    List<TreeNode> res = new ArrayList<>();
+    public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+        for (int element: to_delete){
+            del.add(element);
+        }
+        root = dfs(root);
+        if (root != null) res.add(root);
+        return res;
+    }
+    private TreeNode dfs(TreeNode root){
+        if (root == null) return null;
+        root.left = dfs(root.left);
+        root.right = dfs(root.right);
+
+        if (del.contains(root.val)){
+            if (root.left != null) res.add(root.left);
+            if (root.right != null) res.add(root.right);
+            return null;
+        }
+        return root;
+    }
+}
