@@ -1,0 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution 
+{
+    List<Queue<Integer>>queue = new ArrayList<>();
+    TreeNode dummy = null;
+    public TreeNode lcaDeepestLeaves(TreeNode root) 
+    {
+        operation(root, 0);
+        int min = queue.size();
+        Queue<Integer>ans = queue.get(queue.size() - 1);
+        check(root, ans, min);
+        return dummy;
+    }
+    public void operation(TreeNode root, int level)
+    {
+        if(root == null) return;
+
+        level++;
+
+        if(queue.size() < level) queue.add(new LinkedList<>());
+        queue.get(level - 1).add(root.val);
+
+        operation(root.left, level);
+        operation(root.right, level);
+    }
+    public void check(TreeNode root, Queue<Integer>ans, int min)
+    {
+        if(root == null) return;
+
+        queue.clear();
+        operation(root, 0);
+        if(queue.get(queue.size() - 1).equals(ans) && queue.size() <= min) 
+        {
+            dummy = root;
+            min = queue.size();
+        }
+
+        check(root.left, ans, min);
+        check(root.right, ans, min);
+    }
+}
