@@ -1,0 +1,32 @@
+class Solution {
+    public int countPalindromicSubsequence(String s) {
+        int[] lower = new int[26];
+        Arrays.fill(lower, Integer.MAX_VALUE);
+        int[] higher = new int[26];
+        Arrays.fill(higher, -1);
+        
+        int n = s.length();
+        for(int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
+            int idx = ch - 'a';
+            lower[idx] = Math.min(lower[idx], i);
+            higher[idx] = Math.max(higher[idx], i);
+        }
+
+
+        int ans = 0;
+        for(int i = 0; i < 26; i++) {
+            if(lower[i] != Integer.MAX_VALUE && higher[i] != -1) {
+                if(higher[i] - lower[i] > 1) {
+                    Set<Character> set = new HashSet<>();
+                    for(int j = lower[i] + 1; j < higher[i]; j++)
+                    set.add(s.charAt(j));
+
+                    ans += set.size();
+                }
+            }
+        }
+
+        return ans;
+    }
+}
