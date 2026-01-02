@@ -1,0 +1,49 @@
+class Solution {
+
+    int m, n;
+    Integer [][]memo;
+    public int maxCompatibilitySum(int[][] students, int[][] mentors) {
+        
+        m = students.length;
+        n = mentors.length;
+        memo = new Integer[m][1 << n];
+
+        return getMaxScore(students, mentors, 0, 0);
+    }
+
+    private int getMaxScore(int [][]students, int [][]mentors, int mask, int studentIdx)
+    {
+        if (mask == (1 << (n))) return 0;
+
+        if (studentIdx >= m) return 0;
+
+        if (memo[studentIdx][mask] != null) return memo[studentIdx][mask];
+
+        int maxScore =0;
+        for (int mentorIdx=0; mentorIdx<n; mentorIdx++)
+        {
+            if ((mask & 1 << mentorIdx) == 0)
+            {
+                int nextMask = mask | 1 << mentorIdx;
+
+                int compScore = getCompScore(students[studentIdx], mentors[mentorIdx]);
+
+                maxScore = Math.max(maxScore, compScore + getMaxScore(students, mentors, nextMask, studentIdx+1));
+            }
+        }
+
+        return memo[studentIdx][mask] = maxScore;
+    }
+
+    private int getCompScore(int []student, int []mentor)
+    {
+        int score =0;
+
+        for (int i=0; i<student.length; i++)
+        {
+            if (student[i] == mentor[i]) score +=1;
+        }
+
+        return score;
+    }
+}
