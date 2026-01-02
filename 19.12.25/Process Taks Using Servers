@@ -1,0 +1,50 @@
+class Solution {
+    public int[] assignTasks(int[] servers, int[] tasks) {
+        int m = tasks.length;
+        int n = servers.length;
+        int[] result = new int[m];
+        PriorityQueue<int[]> freeservers = new PriorityQueue<int[]>(new Comparator<int[]>(){
+            public int compare(int[] a, int[] b){
+                if(a[0] == b[0]){
+                    return a[1] - b[1];
+                }
+                return a[0] < b[0] ? -1 : 1;
+            }
+        });
+        for(int i = 0; i < n; i++){
+            freeservers.offer(new int[]{servers[i], i});
+        }
+        PriorityQueue<long[]> busyservers = new PriorityQueue<long[]>(new Comparator<long[]>(){
+            public int compare(long[] a, long[] b){
+                if(a[0] == b[0]){
+                    return (int)(a[1] - b[1]);
+                }
+                return a[0] < b[0] ? -1 : 1;
+            }
+        });
+        int taskindex = 0;
+        long currenttime = 0;
+        for(int i = 0; i < m; i++){
+            currenttime = Math.max(currenttime, i);
+
+            if(freeservers.isEmpty()){
+                long[] nextfreeserver = busyservers.peek();
+                currenttime = nextfreeserver[0];
+            }
+
+            while(!busyservers.isEmpty() && busyservers.peek()[0] <= currenttime){
+                long[] freeserver = busyservers.poll();
+                freeservers.offer(new int[]{(int)freeserver[1], (int)freeserver[2]});
+            }
+            int[] server = freeservers.poll();
+            int serverindex = server[1];
+            int serverweight = server[0];
+
+            result[i] = serverindex;
+
+            long freetime = currenttime + tasks[i];
+            busyservers.offer(new long[]{freetime, serverweight, serverindex});
+        }
+        return result;
+    }
+}
