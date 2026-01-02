@@ -1,0 +1,48 @@
+class Solution {
+    int row,col;
+    public static int[] dx={1,-1,0,0};
+    public static int[] dy={0,0,1,-1};
+    public boolean helper(int[][] cells,int limit){
+        HashSet<String>water=new HashSet<>();
+        for(int i=0; i<limit; i++){
+            String s=(cells[i][0]-1)+","+(cells[i][1]-1);
+            water.add(s);
+        }
+        Queue<int[]>q=new LinkedList<>();
+        int[][] vis=new int[row][col];
+        for(int j=0; j<col; j++){
+            String s=0+","+j;
+            if(!water.contains(s)){
+                q.add(new int[]{0,j});
+                vis[0][j]=1;
+            }
+        }
+        while(!q.isEmpty()){
+            int[] cur=q.poll();
+            int x=cur[0],y=cur[1];
+            if(x+1==row)return true;
+            for(int d=0; d<4; d++){
+                int nx=x+dx[d],ny=y+dy[d];
+                if(nx>=0 && nx<row && ny>=0 && ny<col && !water.contains(nx+","+ny) && vis[nx][ny]==0){
+                    q.add(new int[]{nx,ny});
+                    vis[nx][ny]=1;
+                }
+            }
+        }
+        return false;
+    }
+    public int latestDayToCross(int row, int col, int[][] cells) {
+        this.row=row;
+        this.col=col;
+        int l=1,r=cells.length;
+        int ans=l;
+        while(l<=r){
+            int m=l+(r-l)/2;
+            if(helper(cells,m)){
+                ans=m;
+                l=m+1;
+            }else r=m-1;
+        }
+        return ans;
+    }
+}
