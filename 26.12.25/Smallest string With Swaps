@@ -1,0 +1,62 @@
+class Solution {
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        int n = s.length();
+        DSU dsu = new DSU(n);
+        for (List<Integer> p : pairs) {
+            dsu.union(p.get(0), p.get(1));
+        }
+
+        Map<Integer, PriorityQueue<Character>> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int root = dsu.find(i);
+            map.putIfAbsent(root, new PriorityQueue<>());
+            map.get(root).add(s.charAt(i));
+        }
+
+        char[] arr = new char[n];
+        for (int i = 0; i < n; i++) {
+            int root = dsu.find(i);
+            arr[i] = map.get(root).poll();
+        }
+        return String.valueOf(arr);
+    }
+
+    class DSU {
+        int[] parent;
+        int[] rank;
+
+        public DSU(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+            }
+        }
+
+        public int find(int p) {
+            if (parent[p] == p) {
+                return parent[p];
+            }
+            parent[p] = find(parent[p]);
+            return parent[p];
+        }
+
+        public void union(int p, int q) {
+            int x = find(p);
+            int y = find(q);
+            if (x == y) {
+                return;
+            }
+            if (rank[x] < rank[y]) {
+                parent[x] = y;
+            }
+            else if (rank[y] < rank[x]) {
+                parent[y] = x;
+            }
+            else {
+                parent[y] = x;
+                rank[x]++;
+            }
+        }
+    }
+}
