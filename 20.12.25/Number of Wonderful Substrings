@@ -1,0 +1,27 @@
+class Solution {
+    public long wonderfulSubstrings(String word) {
+        int n = word.length();
+        HashMap<Integer, Integer> h = new HashMap<>();
+        long ans = 0;
+        h.put(0, 1);
+        int mask = 0;
+        for(int i = 0; i < n; i++) {
+            char c = word.charAt(i);
+            int shift = c - 'a';
+            mask = mask ^ (1 << shift);
+
+            if(h.containsKey(mask)) ans += h.get(mask);
+
+            for(char ch = 'a'; ch <= 'j'; ch++) {
+                int check = mask ^ (1 << (ch - 'a'));
+                if(h.containsKey(check)) {
+                    ans += h.get(check);
+                }
+            }
+
+            h.put(mask, h.getOrDefault(mask, 0) + 1);
+        }
+
+        return ans;
+    }
+}
