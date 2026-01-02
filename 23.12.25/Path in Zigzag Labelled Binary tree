@@ -1,0 +1,26 @@
+class Solution {
+    int label ;
+    int dk = 0;
+    public List<Integer> pathInZigZagTree(int label) {
+        this.label = label;
+        int lvl = 0;
+        int range = 0;
+        return trv(  1 , 1 , 1);
+    }
+    List<Integer> trv( double st , double end , int lvl) {
+        List<Integer> l = new ArrayList<>();
+        if(end >= label){
+            l.add(label);
+            label /= 2;   
+            if(lvl % 2 == 0)dk++;
+            return l;
+        }
+        l.addAll(trv( end+1 , end + Math.pow(2 , lvl) , lvl+1));
+        int ahd = label - (int)st;
+        if(lvl % 2 == dk)l.add(0 , (int)(end - ahd));
+        else l.add(0 , label);
+        label /= 2;
+        return l;
+    }
+
+}
