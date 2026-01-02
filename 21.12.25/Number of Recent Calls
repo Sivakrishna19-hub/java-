@@ -1,0 +1,13 @@
+class RecentCounter {
+    ArrayDeque<Integer> q;
+    public RecentCounter() {
+        q = new ArrayDeque<>();
+    }
+    
+    public int ping(int t) {
+        int counts = 0, lrange = t-3000, rrange = t;
+        q.add(t);
+        while(q.peek() < lrange) q.pop();
+        return q.size();
+    }
+}
