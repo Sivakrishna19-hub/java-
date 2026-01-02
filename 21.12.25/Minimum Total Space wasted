@@ -1,0 +1,44 @@
+class Solution {
+    private static final int INF = 1_000_000_000;
+    private int[][] memo;
+    
+    public int minSpaceWastedKResizing(int[] nums, int k) {
+        int n = nums.length;
+        memo = new int[n][k + 1];
+        
+        for (int[] row : memo) {
+            Arrays.fill(row, -1);
+        }
+        
+        return dp(0, k, nums);
+    }
+    
+    private int dp(int i, int k, int[] nums) {
+        int n = nums.length;
+        
+        if (i == n) return 0;
+        if (k < 0) return INF;
+        if (memo[i][k] != -1) return memo[i][k];
+        
+        int max = nums[i];
+        int sum = 0;
+        int minWaste = INF;
+        
+        for (int j = i; j < n; j++) {
+            max = Math.max(max, nums[j]);
+            sum += nums[j];
+            int currentWaste = max * (j - i + 1) - sum;
+            
+            if (currentWaste >= minWaste) continue;
+            
+            int nextWaste = dp(j + 1, k - 1, nums);
+            if (nextWaste < INF - currentWaste) { 
+                minWaste = Math.min(minWaste, currentWaste + nextWaste);
+            }
+            
+            if (minWaste == 0) break;
+        }
+        
+        return memo[i][k] = minWaste;
+    }
+}
