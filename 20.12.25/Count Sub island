@@ -1,0 +1,35 @@
+class Solution {
+
+    public boolean isSubIsland(int[][] grid1, int[][] grid2, int m, int n, int i, int j) {
+        if(i < 0 || i >= m || j < 0 || j >= n || grid2[i][j] != 1) {
+            return true;
+        }
+
+        grid2[i][j] = 2;
+
+        boolean left = isSubIsland(grid1, grid2, m, n, i, j - 1);
+        boolean top = isSubIsland(grid1, grid2, m, n, i-1, j);
+        boolean right = isSubIsland(grid1, grid2, m, n, i, j + 1);
+        boolean bottom = isSubIsland(grid1, grid2, m, n, i+1, j);
+
+        return left && top && right && bottom && grid1[i][j] == 1;
+
+    }
+
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        int m = grid1.length;
+        int n = grid1[0].length;
+
+        int count = 0;
+
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid2[i][j] == 1 && isSubIsland(grid1, grid2, m, n, i, j)) {
+                    count += 1;
+                }
+            }
+        }
+
+        return count;
+    }
+}
