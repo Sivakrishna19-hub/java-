@@ -1,0 +1,11 @@
+class Solution {
+    public int twoEggDrop(int floors) {
+        int a = 0;
+        while (floors > 0) {
+            a++; 
+            floors -= a;
+        }
+
+        return a;
+    }
+}
