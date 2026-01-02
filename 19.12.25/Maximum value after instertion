@@ -1,0 +1,42 @@
+class Solution {
+    public String maxValue(String n, int x) {
+        String ans  = "";
+        int len = n.length();
+        if(n.charAt(0) == '-'){
+            
+            for(int i =1;i<n.length();i++){
+                    if(n.charAt(i) - '0' > x){
+                       System.out.println("yess" +" "+n.substring(0,i+1));
+                        int val = 48 + x;
+                        ans = n.substring(0,i) + (char)val + n.substring(i,len);
+                        break;
+
+                    }
+                   
+            }
+             if(ans.length() == 0){
+                        int val = 48 + x;
+                        ans = n + (char)val;
+
+                    }
+        }
+        else{
+            for(int i =0;i<n.length();i++){
+                if(n.charAt(i)-'0'<x){
+                
+                    int val = 48 + x;
+                         
+                        ans = n.substring(0,i) + (char)val + n.substring(i,len);
+                        break;
+                }
+               
+            }
+             if(ans.length() == 0){
+                        int val = 48 + x;
+                        ans = n + (char)val;
+
+                    }
+        }
+        return ans;
+    }
+}
