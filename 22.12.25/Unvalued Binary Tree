@@ -1,0 +1,18 @@
+class Solution 
+{
+    public boolean isUnivalTree(TreeNode root) 
+    {
+        return operation(root, root.val);
+    }
+    public boolean operation(TreeNode root, int value)
+    {
+        if(root == null) return true;
+
+        boolean left = operation(root.left, value);
+        boolean right = operation(root.right, value);
+
+        if(root.val != value) return false;
+
+        return left && right;
+    }
+}
