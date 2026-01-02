@@ -1,0 +1,62 @@
+class Solution {
+    public int longestDecomposition(String text) {
+        return new Decomposer().decompose(text);
+    }
+}
+class Decomposer{
+    String text;
+    int decompose(String text){
+        this.text = text;
+        return decompose(0);
+    }
+    int decompose(int currentIndex){
+        if(currentIndex == text.length()/2){
+            return text.length()%2;
+        }
+        int shortestPrefix = findShortestPrefix(currentIndex);
+        if(shortestPrefix == -1){
+            return 1;
+        }
+        //System.out.println(text.substring(currentIndex,text.length()-currentIndex) + shortestPrefix);
+        return decompose(shortestPrefix + currentIndex)+2;
+    }
+    int findShortestPrefix(int currentIndex){
+        String currentString = text.substring(currentIndex,text.length()-currentIndex);
+        int zIndex[] = getZArray(currentString);
+        int n = zIndex.length;
+        for(int i=n-1;i>=(n/2 + n%2);i--){
+            if(zIndex[i] == n-i){
+                return n-i;
+            }
+        }
+        return -1;
+    }
+    static int[] getZArray(String text){
+        int zArray[] = new int[text.length()];
+        Range knownMatch = new Range(0,0);
+        for(int i=1;i<text.length();i++){
+            if(i<=knownMatch.end){
+                int currentDistance = i-knownMatch.start;
+                zArray[i] = Math.min(
+                    zArray[currentDistance],
+                    knownMatch.end - i + 1
+                );
+            }
+            while(i+zArray[i]<text.length()
+                && text.charAt(i+zArray[i]) == text.charAt(zArray[i])){
+                    zArray[i]++;
+            }
+            if(zArray[i]>knownMatch.end){
+                knownMatch = new Range(i,i+zArray[i]-1);
+            }
+        }
+        return zArray;
+    }
+}
+class Range{
+    int start,end;
+    Range(int start,int end){
+        this.start = start;
+        this.end = end;
+    }
+}
