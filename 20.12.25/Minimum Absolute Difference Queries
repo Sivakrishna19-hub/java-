@@ -1,0 +1,33 @@
+class Solution {
+    public int[] minDifference(int[] nums, int[][] q) {
+        Map<Integer, int[]> mp = new HashMap<>();
+        int[] occ = new int[101];
+        for (int i = 0; i < nums.length; i++) {
+            occ[nums[i]]++;
+            int[] copy = Arrays.copyOf(occ, occ.length);
+            mp.put(i, copy);
+        }
+        
+        int[] ans = new int[q.length];
+        for (int i = 0; i < q.length; i++) {
+            int l = q[i][0], r = q[i][1];
+            if (l == r) {
+                ans[i] = -1;
+                continue;
+            }
+            int last = -1;
+            int min_diff = Integer.MAX_VALUE;
+            for (int j = 1; j <= 100; j++) {
+                int count = mp.get(r)[j] - (l > 0 ? mp.get(l - 1)[j] : 0);
+                if (count > 0 || nums[l] == j || nums[r] == j) {
+                    if (last != -1) {
+                        min_diff = Math.min(min_diff, j - last);
+                    }
+                    last = j;
+                }
+            }
+            ans[i] = min_diff == Integer.MAX_VALUE ? -1 : min_diff;
+        }
+        return ans;
+    }
+}
