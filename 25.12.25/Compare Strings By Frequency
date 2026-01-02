@@ -1,0 +1,50 @@
+class Solution {
+    public int[] numSmallerByFrequency(String[] queries, String[] words) {
+        		ArrayList<Integer> listq= new ArrayList<>();
+		ArrayList<Integer> wordsq= new ArrayList<>();
+		for(int i=0;i<=queries.length-1;i++)
+		{
+			String word=queries[i];
+			
+			int min=word.chars().min().getAsInt();
+			
+		int count=	(int)word.chars().filter(c->c==min).count();
+		listq.add(count);
+		
+		}
+
+		
+		for(int i=0;i<=words.length-1;i++)
+		{
+			String word=words[i];
+			int min=word.chars().min().getAsInt();
+			
+			int count=	(int)word.chars().filter(c->c==min).count();
+			wordsq.add(count);
+		}
+		
+
+		Collections.sort(wordsq, Collections.reverseOrder());
+		int countf=0;
+		int ans[]= new int[queries.length];
+		int k=0;
+		for(int i=0;i<=listq.size()-1;i++)
+		{
+			countf=0;
+			for(int j=0;j<=wordsq.size()-1;j++)
+			{
+				if(listq.get(i)<wordsq.get(j))
+				{
+					countf++;
+				}
+				else {
+					
+					break;
+				}
+			}
+			ans[k]=countf;
+			k++;
+		}
+        return ans;
+    }
+}
