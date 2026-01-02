@@ -1,0 +1,71 @@
+class Solution {
+    List<List<Integer>> groupTopoSort;
+    List<List<Integer>> elementTopoSort;
+
+    public int[] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {
+        groupTopoSort = new ArrayList<>();
+        elementTopoSort = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) elementTopoSort.add(new ArrayList<>());
+        int[] indegreeEle = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            if (group[i] == -1) group[i] = m++;
+        }
+
+        int[] indegreeGrp = new int[m];
+        for (int i = 0; i < m; i++) groupTopoSort.add(new ArrayList<>());
+
+        for (int i = 0; i < n; i++) {
+            int v = group[i];
+            for (int d : beforeItems.get(i)) {
+                int u = group[d];
+                if (u != v) { // inter-group edge only!
+                    groupTopoSort.get(u).add(v);
+                    indegreeGrp[v]++;
+                }
+                elementTopoSort.get(d).add(i); 
+                indegreeEle[i]++;
+            }
+        }
+
+        List<Integer> groupSort = TopoSort(indegreeGrp, groupTopoSort);
+        List<Integer> elementSort = TopoSort(indegreeEle, elementTopoSort);
+
+        if (groupSort.size() == 0 || elementSort.size() == 0) return new int[0];
+        int[] final_res = new int[n];
+        int idx = 0;
+
+        Map<Integer, List<Integer>> bucket = new HashMap<>();
+        for (int e : elementSort) {
+            bucket.computeIfAbsent(group[e], k -> new ArrayList<>()).add(e);
+        }
+
+        for (int g : groupSort) {
+            if (bucket.containsKey(g)) {
+                for (int e : bucket.get(g)) {
+                    final_res[idx++] = e;
+                }
+            }
+        }
+        return final_res;
+    }
+
+    List<Integer> TopoSort(int[] indegree, List<List<Integer>> graph) {
+        Queue<Integer> q = new LinkedList<>();
+        List<Integer> res = new ArrayList<>();
+
+        for (int i = 0; i < indegree.length; i++) {
+            if (indegree[i] == 0) q.offer(i);
+        }
+
+        while (!q.isEmpty()) {
+            int node = q.poll();
+            res.add(node);
+            for (int nei : graph.get(node)) {
+                if (--indegree[nei] == 0) q.offer(nei);
+            }
+        }
+        return res.size() == indegree.length ? res : new ArrayList<>();
+    }
+}
