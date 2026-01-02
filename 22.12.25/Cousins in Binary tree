@@ -1,4 +1,4 @@
-class Solution 
+class Solution  
 {
     int xparent = -1, yparent = -1;
     public boolean isCousins(TreeNode root, int x, int y) 
