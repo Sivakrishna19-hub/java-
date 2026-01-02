@@ -1,0 +1,35 @@
+class Solution {
+    public int numberOfRounds(String loginTime, String logoutTime) {
+        int login = timeToMins(loginTime);
+        int logout = timeToMins(logoutTime);
+        
+        int start = login;
+        while(start % 15 != 0) {
+            start++;
+        }
+
+        int end = logout;
+        while(end % 15 != 0) {
+            end--;
+        }
+
+        if(login < logout) {
+            if(start > end) {
+                return 0;
+            }
+            return (end - start)/15;
+        } else {
+            int day1 = (1440 - start)/15;
+            int day2 = end/15;
+            return day1 + day2;
+        }
+        
+    }
+
+    int timeToMins(String time) {
+        String[] arr = time.split(":");
+        int hour = Integer.valueOf(arr[0]);
+        int min = Integer.valueOf(arr[1]);
+        return (hour * 60) + min;
+    }
+}
