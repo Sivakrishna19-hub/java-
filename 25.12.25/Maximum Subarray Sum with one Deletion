@@ -1,0 +1,12 @@
+class Solution {
+    public int maximumSum(int[] arr) {
+        int sum1 = arr[0] , sum2 = 0 , ans = arr[0];
+        for(int i =1 ; i<arr.length; i++){
+            sum2 = Math.max(sum2+arr[i] , sum1);
+            sum1 = Math.max(arr[i]+sum1 , arr[i]);
+            int temp = Math.max(sum2 , sum1);
+            ans = Math.max(temp , ans);
+        }
+        return ans;
+    }
+}
