@@ -1,0 +1,52 @@
+class Solution {
+    static class Transaction {
+        int time;
+        int amount;
+        String city;
+        int index;
+
+        Transaction(int t, int a, String c, int i) {
+            time = t;
+            amount = a;
+            city = c;
+            index = i;
+        }
+    }
+
+    public List<String> invalidTransactions(String[] transactions) {
+        Map<String, List<Transaction>> map = new HashMap<>();
+        boolean[] invalid = new boolean[transactions.length];
+
+        for (int i = 0; i < transactions.length; i++) {
+            String[] parts = transactions[i].split(",");
+            String name = parts[0];
+            int time = Integer.parseInt(parts[1]);
+            int amount = Integer.parseInt(parts[2]);
+            String city = parts[3];
+
+            if (amount > 1000) invalid[i] = true;
+
+            Transaction curr = new Transaction(time, amount, city, i);
+            List<Transaction> list = map.getOrDefault(name, new ArrayList<>());
+
+            for (Transaction prev : list) {
+                if (Math.abs(prev.time - curr.time) <= 60 &&
+                    !prev.city.equals(curr.city)) {
+
+                    invalid[prev.index] = true;
+                    invalid[curr.index] = true;
+                }
+            }
+
+            list.add(curr);
+            map.put(name, list);
+        }
+
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < transactions.length; i++)
+            if (invalid[i])
+                result.add(transactions[i]);
+
+        return result;
+    }
+}
