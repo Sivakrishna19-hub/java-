@@ -1,0 +1,32 @@
+class Solution {
+    public TreeNode increasingBST(TreeNode root) 
+    {
+        PriorityQueue<Integer>pq = new PriorityQueue<>();
+        operation(root, pq);
+
+        TreeNode ans = null;
+        while(!pq.isEmpty())
+        {
+            ans = insertion(ans, pq.poll());
+        }
+        return ans;
+    }
+    public void operation(TreeNode root, PriorityQueue<Integer>pq)
+    {
+        if(root == null) return;
+        pq.add(root.val);
+
+        operation(root.left, pq);
+        operation(root.right, pq);
+    } 
+    public TreeNode insertion(TreeNode root, int val)
+    {
+        if(root == null) 
+        {
+            root = new TreeNode(val);
+            return root;
+        }
+        root.right = insertion(root.right, val);
+        return root;
+    }
+}
