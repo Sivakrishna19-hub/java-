@@ -1,0 +1,51 @@
+class Solution {
+    int end;
+    Map<String, Integer> map = new HashMap<>();
+    int[] peopleSkillMask;
+    long[][] dp;
+    public int[] smallestSufficientTeam(String[] skills, List<List<String>> people) {
+        int n = skills.length;
+        end = (1 << n) - 1;
+        //putting skills as per their positions
+        for (int i = 0; i < n; i++) {
+            map.put(skills[i], i);
+        }
+        int m = people.size();
+        peopleSkillMask = new int[m];
+        for (int i = 0; i < m; i++) {
+            for (String str : people.get(i)) {
+                peopleSkillMask[i] |= (1 << map.get(str));
+            }
+        }
+        dp = new long[(1 << n)][m];
+        for (int i = 0; i <= end; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+        long team = solve(0, 0);
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            if ((team & (1L << i)) != 0)
+                res.add(i);
+        }
+        int[] ans = new int[res.size()];
+        for (int i = 0; i < res.size(); i++) {
+            ans[i] = res.get(i);
+        }
+        return ans;
+
+
+    }
+    private long solve(int mask, int pos) {
+        if (mask == end) {
+            return 0L;
+        }
+        if (pos == peopleSkillMask.length)
+            return Long.MAX_VALUE;//2^63 - 1
+        if (dp[mask][pos] != -1)
+            return dp[mask][pos];
+        long notTake = solve(mask, pos + 1);
+        long take = (1L << pos) | solve(mask | peopleSkillMask[pos], pos + 1);
+        long ans = Long.bitCount(take) > Long.bitCount(notTake) ? notTake : take;
+        return dp[mask][pos] = ans;
+    }
+}
