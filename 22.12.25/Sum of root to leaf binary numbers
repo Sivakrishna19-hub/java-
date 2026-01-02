@@ -1,0 +1,20 @@
+class Solution 
+{
+    public int sumRootToLeaf(TreeNode root) 
+    {
+        int a[] = new int[1];
+        operation(root, 0, a);
+        return a[0];
+    }
+    public void operation(TreeNode root, int temp, int a[])
+    {
+        if(root == null) return;
+
+        temp = temp * 2 + root.val;
+
+        operation(root.left, temp, a);
+        operation(root.right, temp, a);
+
+        if(root.left == null && root.right == null) a[0] += temp;
+    }
+}
