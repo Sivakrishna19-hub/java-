@@ -1,0 +1,25 @@
+class Solution {
+    public int mctFromLeafValues(int[] arr) {
+        int n = arr.length;
+        int tab[][] = new int[n][n];
+        int max[][] = new int[n][n];
+        for(int i = 0; i < n; i++){
+            max[i][i] = arr[i];
+            for(int j = i+1; j < n; j++){
+                max[i][j] = Math.max(max[i][j-1], arr[j]);
+            }
+        }
+        for(int len = 2; len <= n; len++){
+            for(int i = 0; len + i - 1 < n; i++){
+                int j = len + i - 1;
+                tab[i][j] = Integer.MAX_VALUE;
+                for(int k = i; k < j; k++){
+                    int cost = tab[i][k] + tab[k+1][j] + max[i][k]*max[k+1][j];
+                    tab[i][j] = Math.min(cost,tab[i][j]);
+                }
+            }
+
+        }
+        return tab[0][n-1];
+    }
+}
