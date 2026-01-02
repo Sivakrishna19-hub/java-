@@ -1,0 +1,30 @@
+class SnapshotArray {
+    TreeMap<Integer,TreeMap<Integer,Integer>> map;
+    int snapId;
+    public SnapshotArray(int length) {
+        map=new TreeMap<>();
+        snapId=0;
+    }
+    
+    public void set(int index, int val) {
+        map.putIfAbsent(index,new TreeMap<>());
+        map.get(index).put(snapId,val);
+    }
+    
+    public int snap() {
+        snapId++;
+        return snapId-1;
+    }
+    
+    public int get(int index, int snap_id) {
+        if(!map.containsKey(index)){
+            return 0;
+        }
+        TreeMap<Integer,Integer> innermap=map.get(index);
+        Integer value=innermap.floorKey(snap_id);
+        if(value==null){
+            return 0;
+        }
+        return innermap.get(value);
+    }
+}
