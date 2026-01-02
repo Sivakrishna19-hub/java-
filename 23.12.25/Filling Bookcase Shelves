@@ -1,0 +1,32 @@
+class Solution {
+    int books[][];
+    int shelfWidth;
+    Integer dp[];
+    public int minHeightShelves(int[][] books, int shelfWidth) {
+        this.books = books;
+        this.shelfWidth = shelfWidth;
+        this.dp=new Integer[books.length];
+        return solve(0);
+    }
+    public int solve(int currentBook){
+        if(currentBook == books.length){
+            return 0;
+        }
+        if(dp[currentBook]!=null){
+            return dp[currentBook];
+        }
+        int currentWidth = 0;
+        int currentMax = 0;
+        int ans = Integer.MAX_VALUE;
+        for(int i=currentBook;i<books.length;i++){
+            if(books[i][0]+currentWidth<=shelfWidth){
+                currentMax = Math.max(currentMax,books[i][1]);
+                ans=Math.min(solve(i+1)+currentMax,ans);
+                currentWidth += books[i][0];
+            }else{
+                break;
+            }
+        }
+        return dp[currentBook]=ans;
+    }
+}
