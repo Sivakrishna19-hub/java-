@@ -1,0 +1,33 @@
+class Solution 
+{
+    int xparent = -1, yparent = -1;
+    public boolean isCousins(TreeNode root, int x, int y) 
+    {
+        Map<Integer, Integer>map = new HashMap<>();
+        operation(root, map, 0, x, y);
+        if(xparent == yparent) return false;
+        return map.get(x) == map.get(y);
+    }
+    public void operation(TreeNode root, Map<Integer, Integer>map, int depth, int x, int y)
+    {
+        if(root == null) return;
+
+        depth++;
+
+        operation(root.left, map, depth, x, y);
+        operation(root.right, map, depth, x, y);
+
+        if(root.left != null)
+        {
+            if(root.left.val == x) xparent = root.val;
+            if(root.left.val == y) yparent = root.val;
+        }
+        if(root.right != null)
+        {
+            if(root.right.val == x) xparent = root.val;
+            if(root.right.val == y) yparent = root.val;
+        }
+
+        map.put(root.val, depth);
+    } 
+}
