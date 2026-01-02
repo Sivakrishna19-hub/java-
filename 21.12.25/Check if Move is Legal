@@ -1,0 +1,32 @@
+class Solution {
+    public boolean checkMove(char[][] board, int rMove, int cMove, char color) {
+        int[][] dir = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 }, { -1, -1 }, { -1, 1 }, { 1, 1 }, { 1, -1 } };
+
+        board[rMove][cMove] = color;
+
+        for (int[] d : dir) {
+            if (isLegal(board, rMove, cMove, color, d)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isLegal(char[][] board, int row, int col, char color, int[] d) {
+        int n = board.length, m = board[0].length;
+        int length = 1;
+        row += d[0];
+        col += d[1];
+
+        while (row >= 0 && col >= 0 && row < n && col < m) {
+            length++;
+            if (board[row][col] == '.')
+                return false;
+            if (board[row][col] == color)
+                return length >= 3;
+            row += d[0];
+            col += d[1];
+        }
+        return false;
+    }
+}
