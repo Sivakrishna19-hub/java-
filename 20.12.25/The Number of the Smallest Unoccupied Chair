@@ -1,0 +1,31 @@
+class Solution {
+    class Pair{
+        int dep;
+        int seat;
+        public Pair(int dep, int seat){
+            this.dep = dep;
+            this.seat = seat;
+        }
+    }
+    public int smallestChair(int[][] times, int targetFriend) {
+        int targArr = times[targetFriend][0];
+        Arrays.sort(times, (a,b) -> Integer.compare(a[0], b[0]));
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>((x,y) -> x.dep-y.dep);
+        PriorityQueue<Integer> seats = new PriorityQueue<>();
+        int max =0;
+        for(int[] row: times){
+            while(!pq.isEmpty() && pq.peek().dep <=row[0] ){
+                Pair p = pq.poll();
+                seats.add(p.seat);
+            }
+            if(seats.isEmpty()){
+                seats.add(++max);
+            }
+            if(row[0] == targArr) return seats.poll()-1;
+            pq.add(new Pair(row[1], seats.poll()));
+        }
+
+        return 0;
+    }
+}
