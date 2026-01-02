@@ -1,0 +1,58 @@
+class Solution {
+    public int largestMagicSquare(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        n = Math.max(m, n);
+
+        for(int p = n; p >= 0; p--) {
+            if(isPossible(grid, p)) {
+                return p;
+            }
+        }
+
+        return 1;
+    }
+
+    private boolean isPossible(int[][] grid, int p) {
+        int m = grid.length, n = grid[0].length;
+        
+        for(int i = 0; i <= m - p; i++) {
+            for(int j = 0; j <= n - p; j++) {
+                if(isValid(grid, i, j, p)) return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isValid(int[][] matrix, int i, int j, int p) {
+        int row[] = new int[p];
+        int col[] = new int[p];
+        int diag1 = 0;
+        int diag2 = 0;
+
+        for (int i_ = 0; i_ < p; i_++) {
+            for (int j_ = 0; j_ < p; j_++) {
+                int val = matrix[i + i_][j + j_]; 
+                row[i_] += val;
+                col[j_] += val;
+
+                if (i_ == j_)
+                    diag1 += val;
+                if (i_ + j_ == p - 1)
+                    diag2 += val;
+            }
+        }
+
+        int tgt = row[0];
+        for (int sum : row) {
+            if (sum != tgt) return false;
+        }
+
+        for (int sum : col) {
+            if (sum != tgt) return false;
+        }
+
+        if (diag1 != tgt || diag2 != tgt) return false;
+        return true;
+    }
+}
