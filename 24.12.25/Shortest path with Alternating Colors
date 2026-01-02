@@ -1,0 +1,80 @@
+class Solution {
+    static class Info{
+        int src;
+        int des;
+        int color;
+
+        public Info(int src,int des,int color){
+            this.src=src;
+            this.des=des;
+            this.color=color;
+        }
+    }
+
+      static class Pair implements Comparable<Pair>{
+        int n;
+        int path;
+        int color;
+
+        public Pair(int n,int path,int color){
+            this.n=n;
+            this.path=path;
+            this.color=color;
+        }
+        @Override
+        public int compareTo(Pair p2){
+           return  this.path-p2.path; 
+        }
+    }
+    public int[] shortestAlternatingPaths(int n, int[][] redEdges, int[][] blueEdges) {
+        ArrayList<ArrayList<Info>>graph=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            graph.add(new ArrayList<Info>());
+        }
+        for(int i=0;i<redEdges.length;i++){
+           int src=redEdges[i][0];
+           int des=redEdges[i][1];
+           graph.get(src).add(new Info(src,des,0));
+        }
+
+         for(int i=0;i<blueEdges.length;i++){
+           int src=blueEdges[i][0];
+           int des=blueEdges[i][1];
+           graph.get(src).add(new Info(src,des,1));
+        }
+        
+        int dis[]=new int[n];
+        Arrays.fill(dis,-1);
+        dis[0]=0;
+        boolean redvis[]=new boolean[n];
+        boolean bluevis[]=new boolean[n];
+
+        PriorityQueue<Pair>pq=new PriorityQueue<>();
+        pq.add(new Pair(0,0,-1));
+        while(!pq.isEmpty()){
+            Pair curr=pq.remove();
+            int node=curr.n;
+            int lastcolor=curr.color;
+            int dist=curr.path;
+
+            for(Info edge:graph.get(node)){
+                if(edge.color!=lastcolor){
+                    if(edge.color==0&&!redvis[edge.des]){
+                        redvis[edge.des]=true;
+                        pq.add(new Pair(edge.des,dist+1,edge.color));
+                        if(dis[edge.des]==-1) dis[edge.des]=dist+1;
+                    }
+                    else if(edge.color==1&&!bluevis[edge.des]){
+                        bluevis[edge.des]=true;
+                        pq.add(new Pair(edge.des,dist+1,edge.color));
+                        if(dis[edge.des]==-1) dis[edge.des]=dist+1;
+                    }
+                }
+            }
+
+        }
+
+return dis;
+
+    }
+}
