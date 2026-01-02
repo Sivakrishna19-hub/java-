@@ -1,0 +1,48 @@
+class Solution {
+    public static int timer = 1;
+    public static void dfs(ArrayList<ArrayList<Integer>> graph, boolean[] visited, int[] dt, int[] low, List<List<Integer>> bridges, int src, int parent) {
+        visited[src] = true;
+        dt[src] = low[src] = timer++;
+        for (int i=0; i<graph.get(src).size(); i++) {
+            int curr_neighbor = graph.get(src).get(i);
+            if (curr_neighbor != parent) {
+                if (!visited[curr_neighbor]) {
+                    dfs(graph, visited, dt, low, bridges, curr_neighbor, src);
+                    low[src] = Math.min(low[src], low[curr_neighbor]);
+                    if (low[curr_neighbor] > dt[src]) {
+                        ArrayList<Integer> curr_bridge = new ArrayList<>();
+                        curr_bridge.add(src);
+                        curr_bridge.add(curr_neighbor);
+                        bridges.add(curr_bridge);
+                    }
+                } else {
+                    low[src] = Math.min(low[src], dt[curr_neighbor]);
+                }
+            }
+        }
+    }
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+        for (int i=0; i<n; i++) 
+            graph.add(new ArrayList<>());
+
+        for (List<Integer> conn : connections) {
+            int src = conn.get(0);
+            int dest = conn.get(1);
+            graph.get(src).add(dest);
+            graph.get(dest).add(src);
+        }
+
+        boolean[] visited = new boolean[n]; 
+        int[] dt = new int[n];
+        int[] low = new int[n]; 
+        List<List<Integer>> bridges = new ArrayList<>(); 
+        
+        for(int i=0; i<n; i++) {
+            if (!visited[i]) {
+                dfs(graph, visited, dt, low, bridges, i, -1); 
+            }
+        }
+        return bridges;
+    }
+}
