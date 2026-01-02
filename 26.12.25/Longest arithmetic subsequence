@@ -1,0 +1,15 @@
+class Solution {
+    public int longestSubsequence(int[] arr, int difference) {
+       Map<Integer, Integer> dp = new HashMap<>();
+        int ans = 0;
+
+        for (int v : arr) {
+            int prev = v - difference;
+            int length = dp.getOrDefault(prev, 0) + 1;
+            dp.put(v, length);
+            ans = Math.max(ans, length);
+        }
+
+        return ans;
+    }
+}
