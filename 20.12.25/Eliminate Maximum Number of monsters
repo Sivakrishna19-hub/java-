@@ -1,0 +1,27 @@
+class Solution {
+    public int eliminateMaximum(int[] dist, int[] speed) {
+       int len = dist.length;
+       int ans = 1;
+       int time = 1;
+       float[] arr = new float[len];
+
+       for( int i = 0; i < len; i++)
+       {
+            arr[i] = (float)((float)dist[i]/(float)speed[i]);
+            //System.out.println(" i "+i+ " val "+arr[i]);
+       } 
+
+       Arrays.sort(arr);
+
+       for(int i = 1; i < len; i++)
+       {
+            if(arr[i] <= time)
+            {
+                break;
+            }
+            ans++;
+            time = time + 1;
+       }
+       return ans;
+    }
+}
