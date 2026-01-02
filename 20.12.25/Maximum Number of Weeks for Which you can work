@@ -1,0 +1,17 @@
+class Solution {
+    public long numberOfWeeks(final int[] milestones) {
+        long max = 0, sum = 0;
+
+        for(int milestone : milestones) {
+            max = Math.max(max, milestone);
+            sum += milestone;
+        }
+
+        final long sumWithoutMax = sum - max;
+
+        if(max > sumWithoutMax)
+            return 1 + sumWithoutMax * 2;
+
+        return sum;
+    }
+}
