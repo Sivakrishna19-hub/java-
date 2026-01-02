@@ -1,0 +1,51 @@
+class Solution {
+    public int kConcatenationMaxSum(int[] arr, int k) {
+        int mod = 1000000007;
+        int n = arr.length;
+        
+        long totalSum = 0;
+        for (int num : arr) {
+            totalSum += num;
+        }
+        
+        long maxPrefix = 0;
+        long currentPrefix = 0;
+        for (int i = 0; i < n; i++) {
+            currentPrefix += arr[i];
+            maxPrefix = Math.max(maxPrefix, currentPrefix);
+        }
+        
+        long maxSuffix = 0;
+        long currentSuffix = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            currentSuffix += arr[i];
+            maxSuffix = Math.max(maxSuffix, currentSuffix);
+        }
+        
+        long kadaneResult = kadane(arr);
+        
+        if (k == 1) {
+            return (int) (kadaneResult % mod);
+        }
+        
+        if (totalSum > 0) {
+            long result = maxSuffix + (k - 2) * totalSum + maxPrefix;
+            return (int) (Math.max(kadaneResult, result) % mod);
+        } else {
+            long result = maxSuffix + maxPrefix;
+            return (int) (Math.max(kadaneResult, result) % mod);
+        }
+    }
+    
+    private long kadane(int[] arr) {
+        long maxSoFar = 0;
+        long maxEndingHere = 0;
+        
+        for (int num : arr) {
+            maxEndingHere = Math.max(0, maxEndingHere + num);
+            maxSoFar = Math.max(maxSoFar, maxEndingHere);
+        }
+        
+        return maxSoFar;
+    }
+}
