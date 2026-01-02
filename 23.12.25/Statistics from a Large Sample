@@ -1,0 +1,64 @@
+class Solution {
+    public double[] sampleStats(int[] count) {
+        double[] result= new double[5];
+        LinkedHashMap<Integer, Integer> map= new LinkedHashMap<>();
+        int number= 0;
+       int min= Integer.MAX_VALUE;
+       int max= Integer.MIN_VALUE;
+       int maxFreq= Integer.MIN_VALUE;
+        int elementWithMaxFreq= 0;
+        int numElements= 0;
+        double sum= 0;
+        for(int c: count)
+        {
+            if(c!= 0) 
+            {
+                min= Math.min(min, number);
+                max= Math.max(max, number);
+        if(maxFreq< c)
+        {
+            maxFreq= c;
+            elementWithMaxFreq= number;
+        }
+        numElements+= c;
+        sum+= (number* (long)c);
+                map.put(number, c);
+            }
+             number++;
+        }
+        result[0]= min;
+        result[1]= max;
+       int n= 0;
+       int half= numElements/2;
+       int next= half+ 1;
+       double key1= 0;
+       double key2= 0;
+       for(int key: map.keySet())
+       {
+        int value= map.get(key);
+        n+= value;
+        if(n>= half && key1== 0)
+        {
+            key1= key;
+        }
+        if(n>= next)
+        {
+            key2= key;
+            break;
+        }
+       
+       }
+       result[2]= (sum/ numElements);
+       if(numElements%2== 0)
+       {
+        result[3]= (key1+ key2)/ 2;
+       }
+       else
+       {
+        result[3]= key2;
+       }
+       result[4]= elementWithMaxFreq;
+
+       return result;
+    }
+}
