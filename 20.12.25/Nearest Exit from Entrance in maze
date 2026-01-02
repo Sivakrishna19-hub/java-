@@ -1,0 +1,63 @@
+class Solution {
+
+    static class Pair{
+        int row;
+        int col;
+        int times;
+
+        Pair(int row,int col,int times){
+            this.row = row;
+            this.col = col;
+            this.times = times;
+        }
+    }
+    public static int bfs(char[][] maze,int[] entrance,Queue<Pair> queue,boolean[][] vis){
+
+        int m = maze.length;
+        int n = maze[0].length;
+
+        int[] dRow = {1,-1,0,0};
+        int[] dCol = {0,0,1,-1};
+
+        while(!queue.isEmpty()){
+
+            Pair pair = queue.poll();
+            int row = pair.row;
+            int col = pair.col;
+            int times = pair.times;
+
+             if ((pair.row == 0 || pair.row == m - 1 || pair.col == 0 || pair.col == n - 1)
+                && !(pair.row == entrance[0] && pair.col == entrance[1])) {
+                return pair.times;
+            }
+
+            for(int i=0;i<4;i++){
+                int nRow = row+dRow[i];
+                int nCol = col+dCol[i];
+
+                if(nRow>=0 && nCol>=0 && nRow<m && nCol<n && vis[nRow][nCol]==false && maze[nRow][nCol]=='.'){
+                    queue.add(new Pair(nRow,nCol,times+1));
+                    vis[nRow][nCol]=true;
+                }
+            }
+        }
+        return -1;
+    }
+    public int nearestExit(char[][] maze, int[] entrance) {
+
+        int m = maze.length;
+        int n = maze[0].length;
+        Queue<Pair> queue = new LinkedList<>();
+
+        maze[entrance[0]][entrance[1]]='P';
+
+        boolean[][] vis = new boolean[m][n];
+        
+        queue.add(new Pair(entrance[0],entrance[1],0));
+        vis[entrance[0]][entrance[1]] = true;
+
+        int ans = bfs(maze,entrance,queue,vis);
+
+        return ans;
+    }
+}
