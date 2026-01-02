@@ -1,0 +1,23 @@
+class Solution {
+    public int countVowelPermutation(int n) {
+        long countA = 1, countE = 1, countI = 1, countO = 1, countU = 1;
+        final int MOD = 1000000007;
+
+        for (int i = 1; i < n; i++) {
+            long newA = countE;
+            long newE = (countA + countI) % MOD;
+            long newI = (countA + countE + countO + countU) % MOD;
+            long newO = (countI + countU) % MOD;
+            long newU = countA;
+
+            countA = newA;
+            countE = newE;
+            countI = newI;
+            countO = newO;
+            countU = newU;
+        }
+
+        long total = (countA + countE + countI + countO + countU) % MOD;
+        return (int) total;
+    }
+}
