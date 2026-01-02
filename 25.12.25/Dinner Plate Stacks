@@ -1,0 +1,63 @@
+class DinnerPlates {
+    int n;
+    List<Stack<Integer>> stackList;
+    TreeSet<Integer> available;
+
+    public DinnerPlates(int capacity) {
+        n = capacity;
+        stackList = new ArrayList<>();
+        available = new TreeSet<>();
+    }   
+    
+    private int last(){
+        return stackList.size()-1;
+    }
+
+    public void push(int val) {
+        if(stackList.size() == 0 || available.size() == 0){
+            Stack stack = new Stack<Integer>();
+            stack.push(val);
+            stackList.add(stack);
+
+            if(stack.size() < n){
+                available.add(last());
+            }
+        }else{
+            int index = available.first();
+            Stack stack = stackList.get(index);
+            stack.push(val);
+            
+            if(stack.size() == n){
+                available.remove(index);
+            }
+        }
+    }
+    
+    public int pop() {
+        return popAtStack(last());
+    }
+    
+    public int popAtStack(int index) {
+        if(index < 0 || index >= stackList.size()){
+            return -1;
+        }
+
+        Stack<Integer> stack = stackList.get(index);
+
+        if(stack.size() == 0){
+            return -1;
+        }
+
+        int value = stack.pop();
+        available.add(index);
+
+        if(index == last()){
+            while(stackList.size() > 0 && stackList.get(last()).size() == 0){
+                available.remove(last());
+                stackList.remove(last());
+            }
+        }
+
+        return value;
+    }
+}
