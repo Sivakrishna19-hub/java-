@@ -1,0 +1,23 @@
+class Solution {
+    public int minFlips(String S) {
+        char[] s = S.toCharArray();
+        int n = s.length;
+        int cnt = 0, min = n;
+        for(int i = 0; i < 2*n - 1; i++){
+            //10101... i%2==0
+            //01010... i%2==1
+            char cur = s[i % n];
+            if(i%2 != cur%2){
+                //char['0'] = 48, char['1'] = 49
+                cnt++;
+            }
+            if(i >= n - 1){
+                min = Math.min(min, Math.min(n - cnt, cnt));
+                if((i - n + 1)%2 != s[i - n + 1]%2){
+                    cnt--;
+                }    
+            }
+        }
+        return min;
+    }
+}
