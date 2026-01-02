@@ -1,0 +1,19 @@
+class Solution {
+    int mod = 1000000007;
+    public int countGoodNumbers(long n) {
+        long even = (n + 1) / 2;
+        long odd = n/2;
+
+        return (int)(pow(5, even, 1L) * pow(4, odd,  1L)% mod);
+    }
+
+    public long pow(long x, long n, long res){
+        if(n==0) return res;
+    
+        if(n%2==1){
+            return pow(x, n-1, (res * x)% mod);
+        }else {
+            return pow((x*x)% mod, n/2, res);
+        }
+    }
+}
