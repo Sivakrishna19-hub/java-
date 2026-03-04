@@ -1,0 +1,32 @@
+class SummaryRanges {
+    private final TreeSet<Integer> set = new TreeSet<>();
+
+    public SummaryRanges() {}
+
+    public void addNum(int value) {
+        set.add(value);  // O(logn)
+    }
+
+    public int[][] getIntervals() {
+        if (set.isEmpty()) 
+            return new int[0][0];
+
+        List<int[]> res = new ArrayList<>();
+        Iterator<Integer> it = set.iterator();
+
+        int start = it.next(), end = start;
+
+        while (it.hasNext()) {  // O(n)
+            int x = it.next();
+            if (x == end + 1)
+                end = x;
+            else {
+                res.add(new int[]{start, end});
+                start = end = x;
+            }
+        }
+        res.add(new int[]{start, end});
+
+        return res.toArray(new int[res.size()][]);
+    }
+}
